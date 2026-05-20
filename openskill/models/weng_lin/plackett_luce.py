@@ -776,6 +776,7 @@ class PlackettLuce:
     ) -> list[list[PlackettLuceRating]]:
         # Initialize Constants
         original_teams = teams
+        original_mus = [[player.mu for player in team] for team in teams]
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         c = self._c(team_ratings)
         sum_q = self._sum_q(team_ratings, c, scores)
@@ -900,11 +901,11 @@ class PlackettLuce:
         for rank, indices in rank_groups.items():
             if len(indices) > 1:
                 avg_mu_change = sum(
-                    result[i][0].mu - original_teams[i][0].mu for i in indices
+                    result[i][0].mu - original_mus[i][0] for i in indices
                 ) / len(indices)
                 for i in indices:
                     for j in range(len(result[i])):
-                        result[i][j].mu = original_teams[i][j].mu + avg_mu_change
+                        result[i][j].mu = original_mus[i][j] + avg_mu_change
 
         return result
 
